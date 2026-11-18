@@ -1,0 +1,13 @@
+# Render Blueprint - one free Docker web service (Tomcat + embedded MariaDB).
+# Data lives inside the container, so it resets to the seed data on every
+# restart/redeploy (fine for a demo; set DB_URL/DB_USER/DB_PASSWORD to use an
+# external MySQL instead).
+services:
+  - type: web
+    name: student-record-management-system
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeploy: true

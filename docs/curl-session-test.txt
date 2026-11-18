@@ -1,0 +1,37 @@
+### 1. Protected page without a session (AuthFilter)
+$ curl -i http://localhost:8080/srms/students
+HTTP/1.1 302 
+Location: /srms/login?expired=1
+
+### 2. Login with wrong password (LoginServlet, HTTP 401)
+$ curl -i -d 'username=admin&password=wrong12' http://localhost:8080/srms/login
+HTTP/1.1 401 
+<div class="alert alert-danger" id="server-error">&#9888; Invalid username or password.</div>
+
+### 3. Login admin/admin123 -> new JSESSIONID + redirect to dashboard
+$ curl -i -c cookies.txt -d 'username=admin&password=admin123' http://localhost:8080/srms/login
+HTTP/1.1 302 
+Set-Cookie: JSESSIONID=6519DCBA79BAE31EB7FFB813470CAF3C; Path=/srms; HttpOnly
+Set-Cookie: srms_last_user=admin; Max-Age=604800; Expires=Wed, 25 Nov 2026 13:34:16 GMT; Path=/srms; HttpOnly
+Location: /srms/dashboard
+
+### 4. Dashboard with the session cookie (session tracking values)
+$ curl -b cookies.txt http://localhost:8080/srms/dashboard
+Logged-in user: admin (ADMIN)
+Login time: 18-11-2026 19:04:16
+Session ID: 6519DCBA79BAE31EB7FFB813470CAF3C
+Session created: 18-11-2026 19:04:16
+Last accessed: 18-11-2026 19:04:16
+Timeout: 30 minutes of inactivity
+Pages viewed (this session): 1
+Active sessions on server: 3
+
+### 5. Logout (LogoutServlet invalidates the HttpSession)
+$ curl -i -b cookies.txt -X POST http://localhost:8080/srms/logout
+HTTP/1.1 302 
+Location: /srms/login?logout=1
+
+### 6. Re-using the old session cookie after logout
+$ curl -i -b cookies.txt http://localhost:8080/srms/dashboard
+HTTP/1.1 302 
+Location: /srms/login?expired=1

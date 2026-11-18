@@ -1,0 +1,9 @@
+PASS | Swing login with wrong password rejected | Invalid username or password.
+PASS | Login OK, JTable loaded via JDBC SELECT | 8 rows
+PASS | Search 'rajkot' (PreparedStatement LIKE) | 2 rows
+PASS | Swing client-side validation dialog | Validation error: Please fix the following: - Enrollment number must be exactly 11 digits - First name: 2-50 letters only - Last name: 2-50 letters only - Enter a valid email address - Phone must be a 10-digit Indian mobile number - Please select gender - Date of birth must be in yyyy-mm-dd format - Year must be between 1 and 4 - CGPA must be between 0 and 10 (max 2 decimals) - Please select a department
+PASS | Swing INSERT via PreparedStatement | Saved: Student added successfully (id 9).
+PASS | Swing UPDATE via PreparedStatement | Updated: Student updated successfully.
+PASS | Updated row re-read from DB | cgpa=9.10 city=Gondal
+PASS | Duplicate enrollment -> SQLException handled | Database error: This enrollment number already exists.
+PASS | Swing DELETE via PreparedStatement | row removed, 8 rows

@@ -1,0 +1,21 @@
+# Build output
+target/
+*.class
+*.log
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+nbproject/private/
+nbactions.xml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local env / secrets
+.env

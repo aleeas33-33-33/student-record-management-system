@@ -1,0 +1,85 @@
+mysql> SHOW TABLES;
++-------------------+
+| Tables_in_srms_db |
++-------------------+
+| courses           |
+| departments       |
+| enrollments       |
+| students          |
+| users             |
++-------------------+
+
+mysql> DESCRIBE students;
++---------------+--------------+------+-----+---------------------+-------------------------------+
+| Field         | Type         | Null | Key | Default             | Extra                         |
++---------------+--------------+------+-----+---------------------+-------------------------------+
+| student_id    | int(11)      | NO   | PRI | NULL                | auto_increment                |
+| enrollment_no | varchar(11)  | NO   | UNI | NULL                |                               |
+| first_name    | varchar(50)  | NO   |     | NULL                |                               |
+| last_name     | varchar(50)  | NO   |     | NULL                |                               |
+| email         | varchar(100) | NO   | UNI | NULL                |                               |
+| phone         | varchar(10)  | NO   |     | NULL                |                               |
+| gender        | varchar(10)  | NO   |     | NULL                |                               |
+| dob           | date         | NO   |     | NULL                |                               |
+| year_of_study | int(11)      | NO   |     | NULL                |                               |
+| cgpa          | decimal(4,2) | YES  |     | NULL                |                               |
+| city          | varchar(50)  | YES  |     | NULL                |                               |
+| dept_id       | int(11)      | NO   | MUL | NULL                |                               |
+| created_at    | timestamp    | NO   |     | current_timestamp() |                               |
+| updated_at    | timestamp    | NO   |     | current_timestamp() | on update current_timestamp() |
++---------------+--------------+------+-----+---------------------+-------------------------------+
+
+mysql> SELECT table_name, column_name, constraint_name, referenced_table_name AS ref_table, referenced_column_name AS ref_column FROM information_schema.KEY_COLUMN_USAGE WHERE table_schema='srms_db' AND referenced_table_name IS NOT NULL ORDER BY table_name;
++-------------+-------------+-----------------+-------------+------------+
+| table_name  | column_name | constraint_name | ref_table   | ref_column |
++-------------+-------------+-----------------+-------------+------------+
+| courses     | dept_id     | fk_course_dept  | departments | dept_id    |
+| enrollments | course_id   | fk_enr_course   | courses     | course_id  |
+| enrollments | student_id  | fk_enr_student  | students    | student_id |
+| students    | dept_id     | fk_student_dept | departments | dept_id    |
++-------------+-------------+-----------------+-------------+------------+
+
+mysql> SELECT s.enrollment_no, CONCAT(s.first_name,' ',s.last_name) AS name, d.dept_code, s.year_of_study AS yr, s.cgpa, s.city FROM students s JOIN departments d USING(dept_id) ORDER BY s.enrollment_no;
++---------------+---------------+-----------+----+------+-----------+
+| enrollment_no | name          | dept_code | yr | cgpa | city      |
++---------------+---------------+-----------+----+------+-----------+
+| 92510140006   | Karan Trivedi | ME        |  3 | 6.98 | Jamnagar  |
+| 92510150007   | Priya Desai   | EC        |  3 | 8.31 | Bhavnagar |
+| 92610120001   | Vats Kotadia  | CE        |  2 | 8.72 | Rajkot    |
+| 92610120002   | Aarav Shah    | CE        |  2 | 8.10 | Ahmedabad |
+| 92610120003   | Diya Patel    | CE        |  2 | 9.05 | Surat     |
+| 92610130004   | Rohan Mehta   | IT        |  2 | 7.45 | Vadodara  |
+| 92610130005   | Ishita Joshi  | IT        |  2 | 8.64 | Rajkot    |
+| 92710120008   | Neel Raval    | CE        |  1 | NULL | Junagadh  |
++---------------+---------------+-----------+----+------+-----------+
+
+mysql> SELECT dept_id, dept_code, dept_name, hod_name FROM departments;
++---------+-----------+-------------------------------+--------------+
+| dept_id | dept_code | dept_name                     | hod_name     |
++---------+-----------+-------------------------------+--------------+
+|       1 | CE        | Computer Engineering          | Dr. R. Mehta |
+|       2 | IT        | Information Technology        | Dr. S. Patel |
+|       3 | ME        | Mechanical Engineering        | Dr. K. Joshi |
+|       4 | EC        | Electronics and Communication | Dr. A. Shah  |
++---------+-----------+-------------------------------+--------------+
+
+mysql> SELECT c.course_code, c.course_name, d.dept_code, c.semester, c.credits FROM courses c JOIN departments d USING(dept_id);
++-------------+----------------------------+-----------+----------+---------+
+| course_code | course_name                | dept_code | semester | credits |
++-------------+----------------------------+-----------+----------+---------+
+| 01CE0308    | Advance Java Technology    | CE        |        3 |       4 |
+| 01CE0302    | Database Management System | CE        |        3 |       4 |
+| 01CE0304    | Data Structures            | CE        |        3 |       4 |
+| 01EC0303    | Digital Electronics        | EC        |        3 |       4 |
+| 01IT0305    | Web Technologies           | IT        |        3 |       3 |
+| 01ME0301    | Thermodynamics             | ME        |        3 |       4 |
++-------------+----------------------------+-----------+----------+---------+
+
+mysql> SELECT username, LEFT(password_hash,16) AS sha256_prefix, full_name, role FROM users;
++----------+------------------+----------------------+-------+
+| username | sha256_prefix    | full_name            | role  |
++----------+------------------+----------------------+-------+
+| admin    | 240be518fabd2724 | System Administrator | ADMIN |
+| faculty  | 27041f5856c7387a | Faculty Coordinator  | ADMIN |
++----------+------------------+----------------------+-------+
+

@@ -1,0 +1,23 @@
+# Web UI test run 2026-11-18 18:56:31 IST against http://localhost:8080/srms
+PASS | Access /students without login redirects to login | http://localhost:8080/srms/login?expired=1
+PASS | Login client-side validation blocks short input | Username must be 3-50 letters, digits or underscore / Password must be at least 6 characters
+PASS | Wrong password rejected by LoginServlet | ⚠ Invalid username or password.
+PASS | Login admin/admin123 opens dashboard | http://localhost:8080/srms/dashboard
+PASS | Student list (Read) | 8 rows
+PASS | Search 'rajkot' | 2 rows
+PASS | Filter by department IT | 
+PASS | Add form client-side (HTML5+JS) validation | 10 fields flagged
+PASS | Server-side Bean Validation (client checks bypassed) | 10 fields flagged; alert: ⚠ Please correct the highlighted fields (12 error(s)).
+PASS | Duplicate enrollment number rejected | Enrollment number 92610120001 is already registered
+PASS | Create student 92610120009 (Hibernate save) | ✔ Student added: Rahul Sharma (92610120009)
+PASS | Enroll student in 2 courses with marks | 2 enrollments
+PASS | Update student 92610120009 (Hibernate merge) | ✔ Student updated: Rahul Sharma (92610120009)
+PASS | Updated values visible in list | 1 | 92610120009 | Rahul Sharma | rahul.sharma@marwadiuniversity.ac.in | 9825011223 | CE | 3 | 8.45 | Rajkot | View Edit Delete
+PASS | Delete student 92610120009 (cascade enrollments) | ✔ Student deleted: Rahul Sharma (92610120009)
+PASS | Delete department in use is blocked (FK) | ⚠ Cannot delete CE: it still has 4 student(s) and 3 course(s) (foreign key)
+PASS | Department form client validation | 
+PASS | Add course 01CE0310 | 
+PASS | Delete unused course 01CE0310 | 
+PASS | Custom 404 error page | 
+PASS | Logout invalidates session | http://localhost:8080/srms/login?logout=1
+PASS | Dashboard after logout redirects to login | http://localhost:8080/srms/login?expired=1
