@@ -14,7 +14,7 @@ Besides student records, the web application manages departments, courses and co
 | | |
 |---|---|
 | **GitHub repository** | https://github.com/aleeas33-33-33/student-record-management-system |
-| **Live application** | _Link will be added after deployment_ <!-- LIVE_URL --> |
+| **Live application** | https://srms-vats.onrender.com (free Render instance: the first request after a period of inactivity can take about a minute while it wakes up) |
 | **Default login** | `admin` / `admin123` |
 
 ## Contents
@@ -188,15 +188,16 @@ Passwords are stored as SHA-256 hashes (`SHA2('admin123',256)`).
 
 ## 7. Testing
 
-All results come from real runs; see [`docs/TEST_REPORT.md`](docs/TEST_REPORT.md) and the logs in [`docs/`](docs/).
+All results come from real runs; the web, curl and Swing details are in [`docs/TEST_REPORT.md`](docs/TEST_REPORT.md) and the logs in [`docs/`](docs/).
 
 | Area | Checks | Result |
 |---|---|---|
 | Web UI (headless Chrome) | login, client and server validation, CRUD, search, FK rules, 404, logout | 22 / 22 passed |
 | HTTP and session (curl) | redirects, 401 on wrong password, new session ID, logout, old session rejected | 6 / 6 passed |
 | Swing desktop (Xvfb) | login, JDBC insert/read/update/delete, search, validation, SQL errors | 10 / 10 passed |
+| Docker image (Podman, local) | image built and run: `/health` returned 200, login and student list worked, embedded MariaDB 10.6 loaded `schema.sql` | passed |
+| Live deployment (Render) | https://srms-vats.onrender.com: `/health` returned 200, `admin` login opened the dashboard, `/students` listed the seed records | passed |
 
-The Docker image was not built on the development machine (Docker is not installed there); its first build runs on Render.
 
 ## 8. Screenshots
 
