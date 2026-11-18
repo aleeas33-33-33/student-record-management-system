@@ -78,6 +78,6 @@ All results below come from real runs, and every screenshot in `docs/screenshots
 
 ## 6. Not tested
 
-- The `Dockerfile` / `deploy/docker-entrypoint.sh` image was **not built locally** because Docker is not available on the build machine. It should be checked on the first Render build.
+- The `Dockerfile` / `deploy/docker-entrypoint.sh` image was built and run by Render (free web service) from commit `f9844be`. Live check on 2026-11-18, 19:28 IST at https://srms-vats.onrender.com: `/health` returned 200 OK, `admin`/`admin123` login redirected to `/dashboard`, and `/students` listed the seeded records.
   What was checked: `bash -n` syntax check of the entrypoint; both base image tags exist on Docker Hub; the embedded-DB bootstrap was simulated on a fresh MariaDB datadir (`mariadb-install-db`, start, socket-root `schema.sql` + `create_user.sql`, then `srms_user` TCP login: 8 students). That run used MariaDB 11.8, while the image uses Ubuntu jammy's MariaDB 10.6.
 - The live deployment URL does not exist yet.
